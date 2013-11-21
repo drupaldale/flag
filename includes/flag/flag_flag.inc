@@ -789,7 +789,11 @@ class flag_flag {
     }
     elseif ($action == 'flag') {
       // Invoke hook_entity_presave().
-      module_invoke_all('entity_presave', $flagging, 'flagging');
+      // no point in calling presave if null
+      // Causes an exception with title_entity_presave
+      if(isset($flagging)) {
+        module_invoke_all('entity_presave', $flagging, 'flagging');
+      }
 
       if ($this->uses_anonymous_cookies()) {
         $this->_flag_anonymous($entity_id);
